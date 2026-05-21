@@ -13,6 +13,7 @@
             --text-light: #f1faee;
             --accent: #457b9d;
             --card-bg: rgba(15, 52, 96, 0.9);
+            --success-color: #25d366;
         }
 
         body {
@@ -62,7 +63,6 @@
             margin-bottom: 20px;
         }
 
-        /* Sección Quiénes Somos */
         .about-section {
             background-color: var(--card-bg);
             padding: 1.5rem;
@@ -75,12 +75,6 @@
         .about-section p {
             margin: 0 0 10px 0;
             color: #e2e8f0;
-        }
-
-        .about-section ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #a8b2d1;
         }
 
         .form-group {
@@ -147,6 +141,7 @@
         .options-container {
             display: flex;
             gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .option-card {
@@ -162,6 +157,50 @@
             color: var(--primary-color);
             border-bottom: 1px solid var(--accent);
             padding-bottom: 10px;
+        }
+
+        /* MÓDULO DE PASARELA DE PAGO SIMULADA */
+        #checkout-section {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #0a192f;
+            border-radius: 8px;
+            border: 1px solid var(--success-color);
+        }
+
+        .payment-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent);
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: #0a192f;
+        }
+
+        .payment-method-content {
+            display: none;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+
+        .payment-method-content.active {
+            display: block;
         }
 
         /* Secciones Adicionales (Grid) */
@@ -188,14 +227,8 @@
             gap: 10px;
         }
 
-        .info-card h3 i {
-            color: var(--primary-color);
-        }
-
-        .info-card ul {
-            padding-left: 20px;
-            margin: 10px 0 0 0;
-        }
+        .info-card h3 i { color: var(--primary-color); }
+        .info-card ul { padding-left: 20px; margin: 10px 0 0 0; }
 
         /* Botones Flotantes */
         .fab-container {
@@ -229,6 +262,7 @@
 
         @media (max-width: 768px) {
             .options-container { flex-direction: column; }
+            .payment-tabs { flex-direction: column; }
         }
     </style>
 </head>
@@ -245,7 +279,7 @@
         <div class="about-section">
             <h3><i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 10px;"></i>¿Quiénes Somos?</h3>
             <p>En <strong>Car Sound Design</strong> somos apasionados de la ingeniería acústica y el rendimiento automotriz. Nos dedicamos a transformar por completo la experiencia de audio en tu vehículo, combinando componentes de alta calidad con instalaciones limpias, seguras y calculadas a la medida.</p>
-           
+            <p>Ya sea que busques una mejora sutil para el día a día, la máxima fidelidad para disfrutar cada detalle musical, o un sistema de competencia de alta presión, nuestro equipo técnico cuenta con la experiencia en electrónica y diseño acústico para superar tus expectativas.</p>
         </div>
 
         <!-- SECCIÓN: COTIZADOR -->
@@ -277,6 +311,7 @@
             <button type="submit" class="submit-btn"><i class="fas fa-cogs"></i> Generar Propuesta</button>
         </form>
 
+        <!-- SECCIÓN DE RESULTADOS -->
         <div id="results">
             <div class="budget-header">
                 Presupuesto Estimado para tu <span id="res-car" style="color:white; font-weight:bold;"></span>
@@ -290,6 +325,67 @@
                 <div class="option-card">
                     <h3>Opción B (Alternativa)</h3>
                     <ul id="option-b-list"></ul>
+                </div>
+            </div>
+
+            <!-- BOTÓN PARA PAGAR YA -->
+            <button type="button" class="submit-btn" style="background-color: var(--success-color); color: #0a192f; margin-top: 10px;" onclick="mostrarPasarela()">
+                <i class="fas fa-credit-card"></i> Reservar Equipo y Pagar Ahora
+            </button>
+
+            <!-- CONTENEDOR MÉTODOS DE PAGO (OCULTO INICIALMENTE) -->
+            <div id="checkout-section">
+                <h3><i class="fas fa-lock" style="color: var(--success-color);"></i> Pasarela Segura de Pago</h3>
+                <p style="font-size: 0.9rem; color:#a8b2d1;">Selecciona tu método de pago preferido para liquidar o dejar un anticipo de tu cotización.</p>
+                
+                <div class="payment-tabs">
+                    <button type="button" class="tab-btn active" onclick="switchTab('tarjeta')"><i class="fas fa-credit-card"></i> Tarjeta</button>
+                    <button type="button" class="tab-btn" onclick="switchTab('spei')"><i class="fas fa-university"></i> SPEI / Transf.</button>
+                    <button type="button" class="tab-btn" onclick="switchTab('oxxo')"><i class="fas fa-store"></i> Efectivo OXXO</button>
+                </div>
+
+                <!-- Contenido Tarjeta -->
+                <div id="pay-tarjeta" class="payment-method-content active">
+                    <div class="form-group">
+                        <label>Nombre en la Tarjeta:</label>
+                        <input type="text" placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label>Número de Tarjeta:</label>
+                        <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="16">
+                    </div>
+                    <div style="display:flex; gap: 10px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Expiración:</label>
+                            <input type="text" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>CVC:</label>
+                            <input type="text" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    <button type="button" class="submit-btn" style="background-color:var(--success-color); color:#0a192f;" onclick="alert('Simulación de pago exitosa. ¡Tu sistema Car Sound Design está reservado!')">Pagar con Tarjeta</button>
+                </div>
+
+                <!-- Contenido SPEI -->
+                <div id="pay-spei" class="payment-method-content">
+                    <p>Realiza tu transferencia directamente desde tu app bancaria:</p>
+                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius:4px; border-left: 3px solid var(--accent);">
+                        <p><strong>Banco:</strong> STP (Car Sound Design SA)</p>
+                        <p><strong>CLABE:</strong> 6461 8002 3456 7890 12</p>
+                        <p><strong>Concepto:</strong> <span id="spei-concepto">AUDIO-SISTEMA</span></p>
+                    </div>
+                    <p style="font-size:0.85rem; color:#a8b2d1; margin-top:10px;">*El sistema validará el pago automáticamente en un lapso de 5 minutos una vez realizada la transferencia.</p>
+                </div>
+
+                <!-- Contenido OXXO -->
+                <div id="pay-oxxo" class="payment-method-content">
+                    <p>Muestra este código de barras o número de referencia en cualquier caja de OXXO:</p>
+                    <div style="text-align:center; background: white; color: black; padding: 15px; border-radius: 4px;">
+                        <i class="fas fa-barcode" style="font-size: 3.5rem;"></i>
+                        <p style="font-family: monospace; font-size: 1.2rem; margin: 5px 0;">4184 - 2301 - 9485 - 2013</p>
+                    </div>
+                    <p style="font-size:0.85rem; color:#a8b2d1; margin-top:10px;">*Aplica una comisión de $15 MXN en ventanilla del establecimiento.</p>
                 </div>
             </div>
         </div>
@@ -396,8 +492,8 @@
             <div class="info-card">
                 <h3><i class="fas fa-map-marked-alt"></i> Sucursales</h3>
                 <ul>
-                    <li><strong>Sucursal Lomas:</strong> Av. Chapultepec #1570, privadas del pedregal.</li>
-                    <li><strong>Sucursal Centro:</strong> Av. Reforma #456.</li>
+                    <li><strong>Matriz Centro:</strong> Av. Principal #123, Zona Centro.</li>
+                    <li><strong>Sucursal Norte:</strong> Blvd. Tecnológico #456.</li>
                     <li><strong>Horarios:</strong> Lunes a Sábado de 9:00 AM a 6:00 PM.</li>
                 </ul>
             </div>
@@ -461,6 +557,9 @@
             document.getElementById('res-car').innerText = car;
             document.getElementById('res-price').innerText = basePrice;
             
+            // Generar concepto único para la referencia SPEI
+            document.getElementById('spei-concepto').innerText = "CSD-" + Math.floor(1000 + Math.random() * 9000);
+
             const listA = document.getElementById('option-a-list');
             const listB = document.getElementById('option-b-list');
             listA.innerHTML = ''; listB.innerHTML = '';
@@ -468,10 +567,35 @@
             optA.forEach(item => { let li = document.createElement('li'); li.innerText = item; listA.appendChild(li); });
             optB.forEach(item => { let li = document.createElement('li'); li.innerText = item; listB.appendChild(li); });
 
+            // Resetear pasarela de pago si estaba abierta de una consulta anterior
+            document.getElementById('checkout-section').style.display = 'none';
+
             const resultsDiv = document.getElementById('results');
             resultsDiv.style.display = 'block';
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
         });
+
+        // Mostrar pasarela de pago al hacer click
+        function mostrarPasarela() {
+            const checkout = document.getElementById('checkout-section');
+            checkout.style.display = 'block';
+            checkout.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Intercambiar pestañas de métodos de pago
+        function switchTab(method) {
+            // Quitar clase activa a todos los botones
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Quitar clase activa a todos los contenidos
+            const contents = document.querySelectorAll('.payment-method-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Activar botón y contenido correspondiente
+            event.currentTarget.classList.add('active');
+            document.getElementById(`pay-${method}`).classList.add('active');
+        }
 
         // Lógica de la Calculadora de Crédito
         function calcularCredito() {
