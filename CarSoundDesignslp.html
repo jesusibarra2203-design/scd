@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Sound Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --bg-color: #1a1a2e;
+            --panel-bg: rgba(22, 33, 62, 0.95);
+            --text-light: #f1faee;
+            --accent: #457b9d;
+            --card-bg: rgba(15, 52, 96, 0.9);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(26, 26, 46, 0.85), rgba(26, 26, 46, 0.9)), 
+                        url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: rgba(15, 52, 96, 0.9);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            backdrop-filter: blur(5px);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            color: #a8b2d1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--panel-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid var(--accent);
+        }
+
+        h2 {
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Sección Quiénes Somos */
+        .about-section {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .about-section p {
+            margin: 0 0 10px 0;
+            color: #e2e8f0;
+        }
+
+        .about-section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #a8b2d1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #a8b2d1;
+        }
+
+        select, input[type="text"], input[type="number"], input[type="date"], input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #457b9d;
+            border-radius: 5px;
+            background-color: #0a192f;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button.submit-btn:hover {
+            background-color: #d62828;
+        }
+
+        /* Resultados del Cotizador */
+        #results {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px dashed var(--accent);
+        }
+
+        .budget-header {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #a8b2d1;
+        }
+
+        .budget-amount {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            display: block;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .option-card {
+            flex: 1;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+        }
+
+        .option-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        /* Secciones Adicionales (Grid) */
+        .extra-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .info-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .info-card h3 {
+            color: var(--text-light);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card h3 i {
+            color: var(--primary-color);
+        }
+
+        .info-card ul {
+            padding-left: 20px;
+            margin: 10px 0 0 0;
+        }
+
+        /* Botones Flotantes */
+        .fab-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+
+        .fab:hover { transform: scale(1.1); }
+        .fab-whatsapp { background-color: #25d366; }
+        .fab-phone { background-color: #007bff; }
+        .fab-map { background-color: #ea4335; }
+
+        @media (max-width: 768px) {
+            .options-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Car Sound Design</h1>
+        <p>Expertos en Acústica Automotriz y Modificación</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- SECCIÓN: QUIÉNES SOMOS -->
+        <div class="about-section">
+            <h3><i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 10px;"></i>¿Quiénes Somos?</h3>
+            <p>En <strong>Car Sound Design</strong> somos apasionados de la ingeniería acústica y el rendimiento automotriz. Nos dedicamos a transformar por completo la experiencia de audio en tu vehículo, combinando componentes de alta calidad con instalaciones limpias, seguras y calculadas a la medida.</p>
+            <p>Ya sea que busques una mejora sutil para el día a día, la máxima fidelidad para disfrutar cada detalle musical, o un sistema de competencia de alta presión, nuestro equipo técnico cuenta con la experiencia en electrónica y diseño acústico para superar tus expectativas.</p>
+        </div>
+
+        <!-- SECCIÓN: COTIZADOR -->
+        <h2>Cotizador de Sistema de Sonido</h2>
+        <form id="quoteForm">
+            <div class="form-group">
+                <label for="car">Vehículo (Marca y Modelo):</label>
+                <input type="text" id="car" placeholder="Ej. Honda Civic 2022" required>
+            </div>
+            <div class="form-group">
+                <label for="budget">Presupuesto Deseado:</label>
+                <select id="budget" required>
+                    <option value="" disabled selected>Selecciona tu nivel de inversión...</option>
+                    <option value="barato">Económico (Mejora de fábrica)</option>
+                    <option value="medio">Medio (Alta fidelidad)</option>
+                    <option value="caro">Caro (Show / Competencia SPL)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="music">Género Musical Principal:</label>
+                <select id="music" required>
+                    <option value="" disabled selected>Selecciona lo que más escuchas...</option>
+                    <option value="electronica">Electrónica (EDM, Techno)</option>
+                    <option value="banda">Banda</option>
+                    <option value="regional">Regional Mexicano / Corridos</option>
+                    <option value="rock">Rock / Metal</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn"><i class="fas fa-cogs"></i> Generar Propuesta</button>
+        </form>
+
+        <div id="results">
+            <div class="budget-header">
+                Presupuesto Estimado para tu <span id="res-car" style="color:white; font-weight:bold;"></span>
+                <span class="budget-amount" id="res-price">$0.00 MXN</span>
+            </div>
+            <div class="options-container">
+                <div class="option-card">
+                    <h3>Opción A (Recomendación Principal)</h3>
+                    <ul id="option-a-list"></ul>
+                </div>
+                <div class="option-card">
+                    <h3>Opción B (Alternativa)</h3>
+                    <ul id="option-b-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid var(--accent); margin: 3rem 0;">
+
+        <!-- SECCIÓN: INFORMACIÓN ADICIONAL (GRID) -->
+        <h2>Nuestros Servicios y Herramientas</h2>
+        <div class="extra-info-grid">
+            
+            <!-- Calculadora de Crédito -->
+            <div class="info-card">
+                <h3><i class="fas fa-calculator"></i> Simular Plan de Pago</h3>
+                <div class="form-group">
+                    <label>Monto del Equipo ($):</label>
+                    <input type="number" id="cred-monto" placeholder="Ej. 15000">
+                </div>
+                <div class="form-group">
+                    <label>Meses:</label>
+                    <select id="cred-meses">
+                        <option value="3">3 Meses sin intereses</option>
+                        <option value="6">6 Meses sin intereses</option>
+                        <option value="12">12 Meses sin intereses</option>
+                    </select>
+                </div>
+                <button type="button" class="submit-btn" style="padding: 10px; font-size:1rem;" onclick="calcularCredito()">Calcular Mensualidad</button>
+                <p id="cred-resultado" style="margin-top: 10px; font-weight: bold; color: var(--primary-color);"></p>
+            </div>
+
+            <!-- Agendar Cita -->
+            <div class="info-card">
+                <h3><i class="far fa-calendar-alt"></i> Agendar Cita</h3>
+                <div class="form-group">
+                    <label>Fecha:</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>Hora:</label>
+                    <input type="time">
+                </div>
+                <button type="button" class="submit-btn" style="padding: 10px; font-size:1rem;">Reservar Espacio</button>
+            </div>
+
+            <!-- Reparación y Diagnóstico -->
+            <div class="info-card">
+                <h3><i class="fas fa-tools"></i> Taller de Reparación</h3>
+                <p>No solo instalamos, <strong>reparamos</strong>. Especialistas en diagnóstico de circuitos.</p>
+                <ul>
+                    <li>Análisis a nivel componente de placas PCB.</li>
+                    <li>Reparación de etapas de salida en amplificadores Clase D y AB.</li>
+                    <li>Mantenimiento de autoestéreos y procesadores DSP.</li>
+                </ul>
+            </div>
+
+            <!-- Refacciones Originales -->
+            <div class="info-card">
+                <h3><i class="fas fa-box-open"></i> Refacciones Originales</h3>
+                <p>Venta de insumos para instalaciones profesionales y reparaciones:</p>
+                <ul>
+                    <li>Transistores MOSFET originales.</li>
+                    <li>Cableado 100% Cobre (OFC) calibres 0, 4 y 8 AWG.</li>
+                    <li>Fusibles ANL y porta fusibles de alta corriente.</li>
+                </ul>
+            </div>
+
+            <!-- Inventario de Productos -->
+            <div class="info-card">
+                <h3><i class="fas fa-warehouse"></i> Inventario Destacado</h3>
+                <ul>
+                    <li><strong>JL Audio:</strong> Subwoofers W6, Amplificadores HD.</li>
+                    <li><strong>Focal:</strong> Set de medios K2 Power, Expert.</li>
+                    <li><strong>AudioControl:</strong> Epicentros y DSPs.</li>
+                    <li><strong>Pioneer & Kenwood:</strong> Estéreos Pantalla Flotante.</li>
+                </ul>
+            </div>
+
+            <!-- Promociones -->
+            <div class="info-card">
+                <h3><i class="fas fa-tags"></i> Promociones del Mes</h3>
+                <ul>
+                    <li>Instalación GRATIS en la compra de sistemas completos (Medio y Caro).</li>
+                    <li>15% de descuento en insonorización (Dynamat / Kilmat) de 4 puertas.</li>
+                    <li>Hasta 12 Meses Sin Intereses con tarjetas participantes.</li>
+                </ul>
+            </div>
+
+            <!-- Asesor en Línea -->
+            <div class="info-card">
+                <h3><i class="fas fa-headset"></i> Asesor en Línea</h3>
+                <p>¿Tienes dudas técnicas sobre ohmiados, cajas acústicas o cableado? Nuestros expertos te orientan en tiempo real.</p>
+                <button type="button" class="submit-btn" style="padding: 10px; font-size:1rem; background-color:#25d366;"><i class="fab fa-whatsapp"></i> Chatear con Asesor</button>
+            </div>
+
+            <!-- Opiniones de Clientes -->
+            <div class="info-card">
+                <h3><i class="fas fa-star"></i> Opiniones</h3>
+                <p style="font-style: italic;">"Me repararon el amplificador quemado y la instalación quedó impecable, cero ruidos de motor en las bocinas."</p>
+                <p style="text-align: right; color: var(--primary-color);">- Carlos R.</p>
+                <p style="font-style: italic;">"El cajón porteado que me diseñaron hizo que mi bajo sonara al doble."</p>
+                <p style="text-align: right; color: var(--primary-color);">- Miguel S.</p>
+            </div>
+
+            <!-- Sucursales -->
+            <div class="info-card">
+                <h3><i class="fas fa-map-marked-alt"></i> Sucursales</h3>
+                <ul>
+                    <li><strong>Sucursal Lomas:</strong> Av. Chapultepec #1570, privadas del pedregal.</li>
+                    <li><strong>Sucursal Centro:</strong> Av. Reforma #456.</li>
+                    <li><strong>Horarios:</strong> Lunes a Sábado de 9:00 AM a 6:00 PM.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Accesos Directos Flotantes -->
+    <div class="fab-container">
+        <a href="#" class="fab fab-whatsapp" title="Contactar por WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="fab fab-phone" title="Llamar"><i class="fas fa-phone"></i></a>
+        <a href="#" class="fab fab-map" title="Ubicación"><i class="fas fa-map-marker-alt"></i></a>
+    </div>
+
+    <script>
+        // Lógica del Cotizador
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const car = document.getElementById('car').value;
+            const budget = document.getElementById('budget').value;
+            const music = document.getElementById('music').value;
+
+            let basePrice = 0;
+            let optA = [];
+            let optB = [];
+
+            let necesitaEpicentro = (music === 'banda' || music === 'regional');
+            let enfoqueBajo = (music === 'electronica');
+            let enfoqueMedios = (music === 'rock');
+
+            if (budget === 'caro') {
+                basePrice = "$35,000 - $60,000+ MXN";
+                optA.push("Set de medios Focal K2 Power (Puertas delanteras)");
+                optA.push("Amplificador de 4 canales JL Audio HD");
+                optA.push("Subwoofer 12\" JL Audio W6 en cajón porteado");
+                optB.push("Set de medios Morel Tempo Ultra");
+                optB.push("Subwoofer 10\" Alpine R-Series");
+            } else if (budget === 'medio') {
+                basePrice = "$15,000 - $25,000 MXN";
+                optA.push("Set de medios Pioneer Serie Z");
+                optA.push("Subwoofer 12\" Kicker CompR");
+                optB.push("Set de medios JBL Club");
+                optB.push("Subwoofer 12\" JBL Stage");
+            } else if (budget === 'barato') {
+                basePrice = "$5,000 - $10,000 MXN";
+                optA.push("Bocinas coaxiales Sony Xplod (4 puertas)");
+                optA.push("Autoestéreo Pioneer con Bluetooth");
+                optB.push("Bocinas coaxiales JVC");
+                optB.push("Bajo amplificado genérico 8\"");
+            }
+
+            if (necesitaEpicentro) {
+                if (budget === 'caro') optA.push("Epicentro AudioControl The Epicenter");
+                else if (budget === 'medio') optA.push("Epicentro Hifonics");
+                else optA.push("Epicentro económico Rock Series");
+            }
+
+            if (enfoqueBajo && budget !== 'barato') optA.push("Capacitor 2F para estabilizar corriente");
+            if (enfoqueMedios && budget !== 'barato') optA.push("Procesador DSP para ajuste fino de frecuencias");
+
+            document.getElementById('res-car').innerText = car;
+            document.getElementById('res-price').innerText = basePrice;
+            
+            const listA = document.getElementById('option-a-list');
+            const listB = document.getElementById('option-b-list');
+            listA.innerHTML = ''; listB.innerHTML = '';
+
+            optA.forEach(item => { let li = document.createElement('li'); li.innerText = item; listA.appendChild(li); });
+            optB.forEach(item => { let li = document.createElement('li'); li.innerText = item; listB.appendChild(li); });
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Lógica de la Calculadora de Crédito
+        function calcularCredito() {
+            const montoInput = document.getElementById('cred-monto').value;
+            const meses = parseInt(document.getElementById('cred-meses').value);
+            const resultadoText = document.getElementById('cred-resultado');
+
+            if (!montoInput || montoInput <= 0) {
+                resultadoText.innerText = "Por favor ingresa un monto válido.";
+                resultadoText.style.color = "red";
+                return;
+            }
+
+            const pagoMensual = (montoInput / meses).toFixed(2);
+            resultadoText.style.color = "var(--primary-color)";
+            resultadoText.innerText = `Pagarías aproximadamente $${pagoMensual} MXN al mes por ${meses} meses.`;
+        }
+    </script>
+</body>
+</html>
